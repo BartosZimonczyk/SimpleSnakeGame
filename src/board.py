@@ -1,10 +1,12 @@
 from random import choice
 
 class Board:
-    def __init__(self, size: int) -> None:
+    def __init__(self, size: int, fixed_food: bool = False) -> None:
         self.size = size
+        self.fixed_food = fixed_food
         self.board = [[' ' for _ in range(self.size)] for _ in range(self.size)]
         self.food_coords = [None, None]
+        self.first_run = True
         self.new_food()
     
     def empty_elements(self) -> list:
@@ -25,7 +27,12 @@ class Board:
         
         # create new food
         empties = self.empty_elements()
-        self.food_coords = choice(empties)
+        if self.fixed_food and self.first_run:
+            self.food_coords = [1, 1]
+            self.first_run = False
+        else:
+            self.food_coords = choice(empties)
+        
         self.board[self.food_coords[0]][self.food_coords[1]] = 'x'
         
     def print(self) -> None:
